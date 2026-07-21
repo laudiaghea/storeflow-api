@@ -34,7 +34,7 @@ class CustomerController extends Controller
      */
     public function store(CustomerRequest $request)
     {
-        $customer = $this->customerService->create($request->all());
+        $customer = $this->customerService->create($request->validated());
 
         return response()->json([
             'success' => true,
@@ -62,7 +62,7 @@ class CustomerController extends Controller
      */
     public function update(CustomerRequest $request, string $id)
     {
-        $customer = $this->customerService->update($id, $request->all());
+        $customer = $this->customerService->update($id, $request->validated());
 
         return response()->json([
             'success' => true,

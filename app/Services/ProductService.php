@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\Interfaces\ProductRepositoryInterface;
+use App\Exceptions\NotFoundException;
 
 class ProductService
 {
@@ -20,7 +21,14 @@ class ProductService
 
     public function findById($id)
     {
-        return $this->productRepository->findById($id);
+        $product =  $this->productRepository->findById($id);
+
+        if (!$product) {
+            throw new NotFoundException("Product tidak ditemukan");
+        }
+
+        return $product;
+
     }
 
     public function create(array $data)
@@ -30,11 +38,23 @@ class ProductService
 
     public function update($id, array $data)
     {
+        $product = $this->productRepository->findById($id);
+
+        if (!$product) {
+            throw new NotFoundException("Produk tidak ditemukan");
+        }
+
         return $this->productRepository->update($id, $data);
     }
 
     public function delete($id)
     {
-        return $this->productRepository->delete($id);
+        $product = $this->productRepository->findById($id);
+
+        if (!$product) {
+            throw new NotFoundException("Produk tidak ditemukan");
+        }
+
+        return $this->productRepository->delete($id);;
     }
 }

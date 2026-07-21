@@ -7,6 +7,8 @@ use App\Repositories\Interfaces\ProductRepositoryInterface;
 use App\Repositories\Interfaces\TransactionDetailRepositoryInterface;
 use App\Repositories\Interfaces\CustomerRepositoryInterface;
 use Illuminate\Support\Facades\DB;
+use App\Exceptions\NotFoundException;
+use App\Exceptions\ValidationException;
 
 class TransactionService
 {
@@ -34,7 +36,13 @@ class TransactionService
 
     public function findById($id)
     {
-        return $this->transactionRepository->findById($id);
+        $transaction = $this->transactionRepository->findById($id);
+
+        if (!$transaction) {
+            throw new NotFoundException("Transaksi tidak ditemukan");
+        }
+
+        return $transaction;
     }
 
     public function createTransaction(array $data)
@@ -44,7 +52,7 @@ class TransactionService
         $customer = $this->customerRepository->findById($data['customer_id']);
 
         if (!$customer) {
-            return null;
+            throw new NotFoundException("Customer tidak ditemukan");
         }
 
         // simpan total transaksi
@@ -57,12 +65,12 @@ class TransactionService
 
             // cek produk
             if (!$product) {
-                return null;
+                throw new NotFoundException("Produk tidak ditemukan");
             }
 
             // cek stok
             if ($product->stok < $item['qty']) {
-                return null;
+                throw new ValidationException("Stok produk tidak cukup");
             }
 
             //hitung totak
@@ -104,7 +112,7 @@ class TransactionService
         $transaction = $this->transactionRepository->findById($id);
 
         if (!$transaction) {
-            return null;
+            throw new NotFoundException("Transaksi tidak ditemukan");
         }
 
         // ambil detail lama
@@ -126,11 +134,11 @@ class TransactionService
             $product = $this->productRepository->findById($item['product_id']);
 
             if (!$product) {
-                return null;
+                throw new NotFoundException("Produk tidak ditemukan");
             }
 
             if ($product->stok < $item['qty']) {
-                return null;
+                throw new ValidationException("Stok produk tidak cukup");
             }
 
             $total += $product->harga * $item['qty'];
@@ -171,12 +179,12 @@ class TransactionService
     public function deleteTransaction($id)
     {
         return DB::transaction(function () use ($id) {
-            
+
         //ambil transaksi
         $transaction = $this->transactionRepository->findById($id);
 
         if (!$transaction) {
-            return null;
+            throw new NotFoundException("Transaksi tidak ditemukan");
         }
 
         //ambil detail transaksi

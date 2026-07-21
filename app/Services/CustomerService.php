@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\Interfaces\CustomerRepositoryInterface;
+use App\Exceptions\NotFoundException;
 
 class CustomerService
 {
@@ -20,7 +21,13 @@ class CustomerService
 
     public function findById($id)
     {
-        return $this->customerRepository->findById($id);
+        $customer = $this->customerRepository->findById($id);
+
+        if (!$customer) {
+            throw new NotFoundException("Customer tidak ditemukan");
+        }
+
+        return $customer;
     }
 
     public function create(array $data)
@@ -30,11 +37,23 @@ class CustomerService
 
     public function update($id, array $data)
     {
+        $customer = $this->customerRepository->findById($id);
+
+        if (!$customer) {
+            throw new NotFoundException("Customer tidak ditemukan");
+        }
+
         return $this->customerRepository->update($id, $data);
     }
 
     public function delete($id)
     {
+        $customer = $this->customerRepository->findById($id);
+
+        if (!$customer) {
+            throw new NotFoundException("Customer tidak ditemukan");
+        }
+
         return $this->customerRepository->delete($id);
     }
 }

@@ -34,7 +34,7 @@ class TransactionController extends Controller
      */
     public function store(TransactionRequest $request)
     {
-        $transaction = $this->transactionService->createTransaction($request->all());
+        $transaction = $this->transactionService->createTransaction($request->validated());
 
         return response()->json([
             'success' => true,
@@ -62,7 +62,7 @@ class TransactionController extends Controller
      */
     public function update(TransactionRequest $request, string $id)
     {
-        $transaction = $this->transactionService->updateTransaction($id, $request->all());
+        $transaction = $this->transactionService->updateTransaction($id, $request->validated());
 
         return response()->json([
             'success' => true,

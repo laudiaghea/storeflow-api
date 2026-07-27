@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 // use Illuminate\Http\Request;
 use App\Http\Requests\TransactionRequest;
+use App\Http\Resources\TransactionResource;
 use App\Services\TransactionService;
 
 class TransactionController extends Controller
@@ -25,7 +26,7 @@ class TransactionController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil diambil',
-            'data' => $transactions
+            'data' => TransactionResource::collection($transactions)
         ], 200);
     }
 
@@ -39,7 +40,7 @@ class TransactionController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil dibuat',
-            'data' => $transaction
+            'data' => new TransactionResource($transaction)
         ], 201);
     }
 
@@ -53,7 +54,7 @@ class TransactionController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil diambil',
-            'data' => $transaction
+            'data' => new TransactionResource($transaction)
         ], 200);
     }
 
@@ -67,7 +68,7 @@ class TransactionController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil diubah',
-            'data' => $transaction
+            'data' => new TransactionResource($transaction)
         ], 200);
     }
 

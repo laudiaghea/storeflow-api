@@ -100,7 +100,7 @@ class TransactionService
             ]);
         }
 
-        return $transaction;
+        return $this->transactionRepository->findById($transaction->id);
 
         });
     }
@@ -171,7 +171,7 @@ class TransactionService
             ]);
         }
 
-        return $transaction;
+        return $this->transactionRepository->findById($transaction->id);
 
         });
     }

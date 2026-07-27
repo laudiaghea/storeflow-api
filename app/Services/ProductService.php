@@ -57,4 +57,21 @@ class ProductService
 
         return $this->productRepository->delete($id);;
     }
+
+    public function increasePrice(int $percent)
+    {
+        $this->productRepository->chunk(100, function ($products) use ($percent) {
+            foreach ($products as $product) {
+                $newPrice = $product->harga * (1 + ($percent / 100));
+
+                $this->productRepository->update($product->id, [
+                    'harga' => $newPrice
+                ]);
+            }
+        });
+
+        return [
+           'message' => 'Harga semua produk berhasil dinaikan sebesar ' . $percent . '%'
+        ];
+    }
 }

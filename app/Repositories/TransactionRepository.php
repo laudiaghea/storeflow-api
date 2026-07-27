@@ -3,18 +3,24 @@
 namespace App\Repositories;
 
 use App\Models\Transaction;
+use App\Models\TransactionDetail;
 use App\Repositories\Interfaces\TransactionRepositoryInterface;
 
 class TransactionRepository implements TransactionRepositoryInterface
 {
     public function getAll()
     {
-        return Transaction::all();
+        return Transaction::with([
+            'customer', 'transactionDetails.product'
+        ])->get();
     }
 
     public function findById($id)
     {
-        return Transaction::find($id);
+        return Transaction::with([
+            'customer',
+            'transactionDetails.product'
+        ])->find($id);
     }
 
     public function create(array $data)
@@ -24,7 +30,9 @@ class TransactionRepository implements TransactionRepositoryInterface
 
     public function update($id, array $data)
     {
-        $Transaction = Transaction::find($id);
+        $Transaction = Transaction::with([
+            'customer', 'TransactionDetails.product'
+        ])->find($id);
 
         $Transaction->update($data);
 

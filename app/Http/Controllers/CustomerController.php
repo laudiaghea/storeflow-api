@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 // use Illuminate\Http\Request;
 use App\Http\Requests\CustomerRequest;
+use App\Http\Resources\CustomerResource;
 use App\Services\CustomerService;
 
 class CustomerController extends Controller
@@ -25,7 +26,7 @@ class CustomerController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil diambil',
-            'data' => $customers
+            'data' => CustomerResource::collection($customers)
         ], 200);
     }
 
@@ -39,7 +40,7 @@ class CustomerController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil ditambahkan',
-            'data' => $customer
+            'data' => new CustomerResource($customer)
         ], 201);
     }
 
@@ -53,7 +54,7 @@ class CustomerController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil diambil',
-            'data' => $customer
+            'data' => new CustomerResource($customer)
         ], 200);
     }
 
@@ -67,7 +68,7 @@ class CustomerController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil diubah',
-            'data' => $customer
+            'data' => new CustomerResource($customer)
         ], 200);
     }
 

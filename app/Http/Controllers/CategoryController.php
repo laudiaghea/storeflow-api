@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CategoryRequest;
 use App\Services\CategoryService;
 use App\Models\Category;
+use App\Http\Resources\CategoryResource;
 
 class CategoryController extends Controller
 {
@@ -25,7 +26,7 @@ class CategoryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil diambil',
-            'data' => $categories
+            'data' => CategoryResource::collection($categories)
         ], 200);
     }
 
@@ -39,7 +40,7 @@ class CategoryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil ditambah',
-            'data' => $category
+            'data' => new CategoryResource($category)
         ], 201);
     }
 
@@ -55,7 +56,7 @@ class CategoryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil diambil',
-            'data' => $category
+            'data' => new CategoryResource($category)
         ], 200);
     }
 
@@ -69,7 +70,7 @@ class CategoryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil diubah',
-            'data' => $category
+            'data' => new CategoryResource($category)
         ], 200);
     }
 

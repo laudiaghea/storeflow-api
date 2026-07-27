@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Services\ProductService;
 use App\Http\Requests\ProductRequest;
-// use Illuminate\Http\Request;
+use Illuminate\Http\Request;
+use App\Http\Resources\ProductResource;
 
 class ProductController extends Controller
 {
@@ -24,7 +25,7 @@ class ProductController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil diambil',
-            'data' => $products
+            'data' => ProductResource::collection($products)
         ], 200);
     }
 
@@ -52,7 +53,7 @@ class ProductController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil diambil',
-            'data' => $product
+            'data' => new ProductResource($product)
         ], 200);
     }
 
@@ -66,7 +67,7 @@ class ProductController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil diubah',
-            'data' => $product
+            'data' => new ProductResource($product)
         ], 200);
     }
 
@@ -81,5 +82,19 @@ class ProductController extends Controller
             'success' => true,
             'message' => 'Data berhasil dihapus',
         ], 200);
+    }
+
+    public function increasePrice(Request $request)
+    {
+        $request->validate([
+            'percent' => 'required|numeric|min:1'
+        ]);
+
+        $result = $this->productService->increasePrice($request->percent);
+
+        return response()->json([
+            'success' => true,
+            'message' => $result['message']
+        ]);
     }
 }

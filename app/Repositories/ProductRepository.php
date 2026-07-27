@@ -9,12 +9,12 @@ class ProductRepository implements ProductRepositoryInterface
 {
     public function getAll()
     {
-        return Product::all();
+        return Product::with('category')->get();
     }
 
     public function findById($id)
     {
-        return Product::find($id);
+        return Product::with('category')->find($id);
     }
 
     public function create(array $data)
@@ -24,7 +24,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function update($id, array $data)
     {
-        $product = Product::find($id);
+        $product = Product::with('category')->find($id);
 
         $product->update($data);
 
@@ -36,5 +36,10 @@ class ProductRepository implements ProductRepositoryInterface
         $product = Product::find($id);
 
         return $product->delete();
+    }
+
+    public function chunk(int $count, callable $callback)
+    {
+        return Product::chunk($count, $callback);
     }
 }

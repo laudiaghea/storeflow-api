@@ -13,4 +13,6 @@ interface ProductRepositoryInterface
     public function update($id, array $data);
 
     public function delete($id);
+
+    public function chunk(int $count, callable $callback);
 }

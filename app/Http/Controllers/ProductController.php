@@ -25,7 +25,13 @@ class ProductController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil diambil',
-            'data' => ProductResource::collection($products)
+            'data' => ProductResource::collection($products->items()),
+            'pagination' => [
+                'currenr_page' => $products->currentPage(),
+                'last_page' => $products->lastPage(),
+                'per_page' => $products->perPage(),
+                'total' => $products->total(),
+            ]
         ], 200);
     }
 
